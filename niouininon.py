@@ -47,11 +47,10 @@ class NiOuiNiNonView(QWidget):
 
     def get_sound(self):
         with sr.Microphone() as source:
-            itsok = False
+            playsound('couin.mp3')
             self.lbl_instructions.setText("A toi de parler...")
             self.lbl_instructions.setStyleSheet("color: #00ff00")
             self.repaint()
-            playsound('couin.mp3')
             try:
                 sound = self.r.listen(source)
                 sound = self.r.recognize_google(sound, language="fr-FR")
