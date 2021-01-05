@@ -15,6 +15,6 @@ Les questions sont empruntées au site : https://www.jeu-de-soiree.fr/generateur
 
 https://pypi.org/project/SpeechRecognition/
 
-##request
-##PySide2
-##playsound
+## request
+## PySide2
+## playsound
