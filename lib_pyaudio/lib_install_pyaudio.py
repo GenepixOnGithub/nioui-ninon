@@ -13,7 +13,7 @@ def install():
     # Python Version
     version = sys.version.split(" ", maxsplit=1)[0].split(".")
     # Path WHL
-    m = "" if int("".join(version[:2])) >= 37 else "m"
+    m = "" if int("".join(version[:2])) >= 38 else "m"
     name_file = "PyAudio-0.2.11-cp{version}-cp{version}{m}-{architecture}.whl".format(version="".join(version[:2]), architecture=architecture, m=m)
     path = os.path.join("lib_pyaudio", name_file)
     print(path)
