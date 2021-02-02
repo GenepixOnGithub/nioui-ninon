@@ -1,3 +1,6 @@
+
+from PySide2.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel
+from PySide2.QtGui import QPixmap
 import sys
 import speech_recognition as sr
 import pyttsx3
@@ -5,32 +8,31 @@ import random
 from random import randint
 import os
 import requests
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
 from playsound import playsound
+
+# Dependance "pyaudio"
+from lib_pyaudio import lib_install_pyaudio
+if not [v for v in lib_install_pyaudio.get_installed_packages() if v == ('pyaudio', '0.2.11')]:
+    lib_install_pyaudio.install()
+
 
 
 class NiOuiNiNonView(QWidget):
     def __init__(self):
-        super().__init__()
+        super(NiOuiNiNonView, self).__init__()
         self.runs_count = 15
-        voice_speed = 200 # vitesse de la parole
+        voice_speed = 200  # vitesse de la parole
         self.current_run = 0
         self.r = sr.Recognizer()
         self.engine = pyttsx3.init()
         self.engine.setProperty("voice", "french")
         self.engine.setProperty("rate", voice_speed)
         # Init window
-        self.init_window()      
-
-    def init_window(self):
         self.setWindowTitle("GENEPIX Geolocalisation")
-        self.setGeometry(300,300, 800,600)
+        self.setGeometry(300, 300, 800, 600)
         self.main_layout = QVBoxLayout()
         self.lbl_logo = QLabel(self)
-        pixmap = QPixmap('img/genepix_niouininon.png')
-        self.lbl_logo.setPixmap(pixmap)
+        self.lbl_logo.setPixmap(QPixmap(os.path.join('img', 'genepix_niouininon.png')))
         self.lbl_sentence = QLabel(self)
         self.lbl_sentence.setStyleSheet("color: #fff;")
         self.lbl_instructions = QLabel(self)
@@ -72,7 +74,8 @@ class NiOuiNiNonView(QWidget):
         self.engine.say(sentence)
         self.engine.runAndWait()
 
-    def scrap_question(self):
+    @staticmethod
+    def scrap_question():
         r = requests.get("https://www.jeu-de-soiree.fr/generateur/questions-indiscretes")
         html = r.text
         pos1 = html.find("<h2>")
@@ -89,7 +92,7 @@ class NiOuiNiNonView(QWidget):
         prenom = self.get_sound()
         self.engine_say(f"Salut {prenom}, t'es chaud? C'est parti.")
 
-        while(self.current_run <= self.runs_count):
+        while self.current_run <= self.runs_count:
             print(f"Run {self.current_run}")
             question = self.scrap_question()
             self.engine_say(question)
@@ -104,8 +107,10 @@ class NiOuiNiNonView(QWidget):
             self.engine_say(f"Bravo {prenom} tu as gagné ! L'équipe de Génépix te félicite !")                  
 
 
-myApp = QApplication(sys.argv)
-window = NiOuiNiNonView()
-window.show() 
-myApp.exec_()
-sys.exit(0)
+
+if __name__ == '__main__':
+    myApp = QApplication()
+    window = NiOuiNiNonView()
+    window.show()
+    myApp.exec_()
+    sys.exit(0)

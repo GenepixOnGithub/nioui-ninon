@@ -1,0 +1,5 @@
+PySide2
+requests
+SpeechRecognition
+pyttsx3
+playsound
